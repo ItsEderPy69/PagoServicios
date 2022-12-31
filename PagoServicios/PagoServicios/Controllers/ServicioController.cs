@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace PagoServicios.Controllers
 {
     /// <summary>
-    /// Controller de Servicios
+    /// AB Servicios
     /// </summary>
     public class ServicioController : ControllerGeneral
     {

@@ -15,8 +15,4 @@
     <ProjectReference Include="..\Persistencia\Persistencia.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pendientes\" />
-  </ItemGroup>
-
 </Project>

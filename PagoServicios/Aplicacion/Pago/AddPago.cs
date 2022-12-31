@@ -9,11 +9,6 @@ namespace Aplicacion.Pago
 {
     public class AddPago
     {
-
-
-
-
-
         public class AddPagoRequest : IRequest<CuentaPagar>
         {            
             public int? CuentaPagarID { get; set; }

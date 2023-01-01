@@ -20,11 +20,11 @@ namespace PagoServicios.Controllers
         /// <summary>
         /// Lista de Cuentas Pendientes
         /// </summary>
-        /// <param name="UsuarioID"></param>
+        /// <param name="numero_cedula"></param>
         /// <returns></returns>
-        [HttpGet("{UsuarioID}")]
-        public async Task<List<CuentaPagar>> getPendientes([FromRoute] int? UsuarioID) {
-            return await _mediator.Send(new GetPendientes.GetPendienteRequest {UsuarioID = UsuarioID });
+        [HttpGet("{numero_cedula}")]
+        public async Task<List<CuentaPagar>> getPendientes([FromRoute] int? numero_cedula) {
+            return await _mediator.Send(new GetPendientes.GetPendienteRequest {numero_cedula = numero_cedula });
         }
 
     }

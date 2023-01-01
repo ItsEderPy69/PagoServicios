@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\PagoServicios"
+    "\\PagoServicios",
+    "\\PagoServicios\\Dominio"
   ],
   "SelectedNode": "\\PagoServicios\\PagoServicios.sln",
   "PreviewInSolutionExplorer": false

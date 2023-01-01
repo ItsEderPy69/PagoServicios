@@ -1,4 +1,5 @@
 using Aplicacion.Servicios;
+using Dominio;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PagoServicios.Middleware;
@@ -36,7 +37,31 @@ app.MapControllers();
 
 using (var context = new ApiDBContext())
 {
+    //se migran si existen cambios
     context.Database.Migrate();
+    //se crean deudas automaticamente para poder probar minimo de 100mil y max de 1m
+    foreach (var user in context.Usuario.AsNoTracking().ToList()) 
+    {
+        foreach (var servicio in context.Servicio.AsNoTracking().ToList()) 
+        { 
+            if(context.CuentaPagar.Where(c=> c.UsuarioID == user.ID && c.ServicioID == servicio.ID && c.Saldo > 0).AsNoTracking().FirstOrDefault() == null)
+            {
+                Random rnd = new Random();
+                var Importe = rnd.Next(100000,1000000);
+                var cuenta = new CuentaPagar
+                {
+                    UsuarioID = user.ID,
+                    Importe = Importe,
+                    Saldo = Importe,
+                    Concepto = "Deuda  " + DateTime.Now.ToShortDateString(),
+                    cuota = 0,
+                    ServicioID = servicio.ID
+                };
+                context.CuentaPagar.Add(cuenta);
+            }
+        }
+    }
+    context.SaveChanges();
 }
 
 app.UseSwagger();

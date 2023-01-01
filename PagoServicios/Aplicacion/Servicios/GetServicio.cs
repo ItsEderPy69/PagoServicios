@@ -30,7 +30,7 @@ namespace Aplicacion.Servicios
             public async Task<Dominio.Servicios> Handle(GetServicioRequest request, CancellationToken cancellationToken)
             {
 
-                if (request.ID == null || request.ID.Trim().Equals("")) { throw new ManejadorExcepcion(HttpStatusCode.OK, "ID no puede estar vacío"); }                                
+                if (request.ID == null || request.ID.Trim().Equals("")) { throw new ManejadorExcepcion(HttpStatusCode.BadRequest, "ID no puede estar vacío"); }                                
                 return await _dbContext.Servicio.Where(c => c.ID.Equals(request.ID)).FirstAsync();
             }
         }

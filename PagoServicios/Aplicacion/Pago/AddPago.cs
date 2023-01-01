@@ -13,7 +13,7 @@ namespace Aplicacion.Pago
         {            
             public int? CuentaPagarID { get; set; }
             public decimal? Importe { get; set; }   
-            public string? Observacion { get; set; }
+            public string? Observacion { get; set; }            
         }
 
         public class Manejador : IRequestHandler<AddPagoRequest, CuentaPagar>

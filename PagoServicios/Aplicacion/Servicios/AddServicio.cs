@@ -34,8 +34,8 @@ namespace Aplicacion.Servicios
             public async Task<Dominio.Servicios> Handle(AddServicioRequest request, CancellationToken cancellationToken)
             {
 
-                if (request.Descripcion == null || request.Descripcion.Trim().Equals("")) { throw new ManejadorExcepcion(HttpStatusCode.OK,"Descripcion no puede estar vacío"); }                
-                if ((await _dbContext.Servicio.Where(c => c.Descripcion.ToUpper().Trim().Equals(request.Descripcion.ToUpper().Trim())).FirstOrDefaultAsync()) != null) { throw new ManejadorExcepcion(HttpStatusCode.OK, "Servicio ya existe"); }
+                if (request.Descripcion == null || request.Descripcion.Trim().Equals("")) { throw new ManejadorExcepcion(HttpStatusCode.BadRequest,"Descripcion no puede estar vacío"); }                
+                if ((await _dbContext.Servicio.Where(c => c.Descripcion.ToUpper().Trim().Equals(request.Descripcion.ToUpper().Trim())).FirstOrDefaultAsync()) != null) { throw new ManejadorExcepcion(HttpStatusCode.NotFound, "Servicio ya existe"); }
                 _dbContext.Database.Migrate();
                 Dominio.Servicios serv = new Dominio.Servicios { Descripcion = request.Descripcion };                
                 _dbContext.Servicio.Add(serv);

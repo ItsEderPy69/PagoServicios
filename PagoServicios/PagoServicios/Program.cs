@@ -2,9 +2,11 @@ using Aplicacion.Servicios;
 using Dominio;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using PagoServicios.Middleware;
 using Persistencia;
 using Swashbuckle.Swagger;
+using System.Configuration;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +14,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(s => 
 {
@@ -23,8 +24,9 @@ builder.Services.AddSwaggerGen(s =>
 
 builder.Services.AddMediatR(typeof(AddServicio.Manejador).Assembly);
 
+PagoServicios.Configuration? config = JsonConvert.DeserializeObject<PagoServicios.Configuration>(File.ReadAllText("appsettings.json"));
 //Se agrega contexto de la Base De Datos
-builder.Services.AddDbContext<ApiDBContext>();
+builder.Services.AddDbContext<ApiDBContext>(db => { db.UseNpgsql(config.ConnectionStrings.DefaultConnection); });
 
 var app = builder.Build();
 
@@ -35,19 +37,20 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-using (var context = new ApiDBContext())
+using (var context = new ApiDBContext(config.ConnectionStrings.DefaultConnection))
 {
+    
     //se migran si existen cambios
     context.Database.Migrate();
     //se crean deudas automaticamente para poder probar minimo de 100mil y max de 1m
-    foreach (var user in context.Usuario.AsNoTracking().ToList()) 
+    foreach (var user in context.Usuario.AsNoTracking().ToList())
     {
-        foreach (var servicio in context.Servicio.AsNoTracking().ToList()) 
-        { 
-            if(context.CuentaPagar.Where(c=> c.UsuarioID == user.ID && c.ServicioID == servicio.ID && c.Saldo > 0).AsNoTracking().FirstOrDefault() == null)
+        foreach (var servicio in context.Servicio.AsNoTracking().ToList())
+        {
+            if (context.CuentaPagar.Where(c => c.UsuarioID == user.ID && c.ServicioID == servicio.ID && c.Saldo > 0).AsNoTracking().FirstOrDefault() == null)
             {
                 Random rnd = new Random();
-                var Importe = rnd.Next(100000,1000000);
+                var Importe = rnd.Next(100000, 1000000);
                 var cuenta = new CuentaPagar
                 {
                     UsuarioID = user.ID,

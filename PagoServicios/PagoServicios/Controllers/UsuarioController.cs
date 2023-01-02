@@ -7,7 +7,7 @@ using System.Text.Json.Nodes;
 namespace PagoServicios.Controllers
 {
     /// <summary>
-    /// Alta de Usuario, Loguin
+    /// Alta de Usuario, Login
     /// </summary>
     public class UsuarioController : ControllerGeneral
     {

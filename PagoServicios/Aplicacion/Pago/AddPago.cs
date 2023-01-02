@@ -35,7 +35,7 @@ namespace Aplicacion.Pago
                 var pago = new PagoRealizado {
                     CuentaPagarID = _CuentaPagar.ID,
                     Importe = (decimal)request.Importe,
-                    FechaPago = DateTime.Now,
+                    FechaPago = DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc),
                     Observacion = (request.Observacion == null ? "" : request.Observacion.Trim())
                 };
                 _CuentaPagar.Saldo -= pago.Importe;
